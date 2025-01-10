@@ -50,9 +50,9 @@ jobs:
           exit 1
         fi
 
-    - name: Install .NET Core 3.1 Runtime
+    - name: Install .NET 6 SDK
       run: |
-        ./dotnet-install.sh --architecture x64 --install-dir /usr/share/dotnet/ --runtime aspnetcore --version 3.1.0
+        ./dotnet-install.sh --architecture x64 --install-dir /usr/share/dotnet/ --version 6.0.0
     - name: Restore dependencies
       run: dotnet restore
 
