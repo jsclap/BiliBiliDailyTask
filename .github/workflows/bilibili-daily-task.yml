@@ -1,40 +1,39 @@
+name: bilibili-daily-task
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  schedule:
+    - cron: '10 6 * * *'
+    # cron表达式，Actions时区是UTC时间，所以要往前推8个小时,如上表示每天14点10分
+
 jobs:
   run-bilibili-tool:
+
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
       
-    - name: Update package lists
-      run: |
-        sudo apt-get update
-        sudo apt-get update --fix-missing
-
-    - name: Install OpenSSL
-      run: |
-        sudo apt-get install -y libssl-dev
-
-    - name: Set InvariantGlobalization
-      run: echo "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" >> $GITHUB_ENV
-      
-    - name: Setup .NET 6
+    - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.x  # 使用 .NET 6 的最新版本
+        dotnet-version: 3.1.301
 
-    - name: Restore dependencies
+    - name: Install dependencies
       run: dotnet restore
-
-    - name: Update Refit package
-      run: dotnet add package Refit --version 6.0.0  # 请使用最新的稳定版本
-
+           export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+      
     - name: Build
       run: dotnet build --configuration Release --no-restore
       
     - name: Run
       env:
-        userId: ${{ secrets.USERID }}
-        sessData: ${{ secrets.SESSDATA }}
-        biliJct: ${{ secrets.BILIJCT }}
-        otherConfigs: ${{ secrets.OTHERCONFIGS }}
-      run: dotnet run --project ./src/Ray.BiliBiliTool.Console -userId=${userId} -sessData=${sessData} -biliJct=${biliJct} -closeConsoleWhenEnd=1 ${otherConfigs}
+        userId: ${{secrets.USERID}}
+        sessData: ${{secrets.SESSDATA}}
+        biliJct: ${{secrets.BILIJCT}}
+        otherConfigs: ${{secrets.OTHERCONFIGS}}
+      run: dotnet run -p ./src/Ray.BiliBiliTool.Console -userId=${userId} -sessData=${sessData} -biliJct=${biliJct} -closeConsoleWhenEnd=1 ${otherConfigs}
