@@ -22,10 +22,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.301
-    - name: Install ICU
+    - name: Add GitHub Packages repository
       run: |
-        sudo apt-get update
-        sudo apt-get install -y libicu-dev
+        echo "deb [signed-by=/usr/share/keyrings/github-packages-keyring.gpg] https://packages.githubusercontent.com/ubuntu/24.04/prod focal main" | sudo tee -a /etc/apt/sources.list.d/github.list
+        curl -L https://packages.githubusercontent.com/ubuntu/24.04/prod/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/github-packages-keyring.gpg
 
     - name: Install dependencies
     
