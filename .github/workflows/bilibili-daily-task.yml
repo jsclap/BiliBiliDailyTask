@@ -29,9 +29,18 @@ jobs:
     - name: Set InvariantGlobalization
       run: echo "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" >> $GITHUB_ENV
       
-    - name: Install dependencies
+    - name: Install .NET 6
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x  # 使用 .NET 6
+
+    - name: Install .NET Core 3.1 Runtime
+      run: |
+        ./dotnet-install.sh --architecture x64 --install-dir /usr/share/dotnet/ --runtime aspnet --version 3.1.0
+
+    - name: Restore dependencies
       run: dotnet restore
-           
+
     - name: Build
       run: dotnet build --configuration Release --no-restore
       
@@ -41,4 +50,4 @@ jobs:
         sessData: ${{ secrets.SESSDATA }}
         biliJct: ${{ secrets.BILIJCT }}
         otherConfigs: ${{ secrets.OTHERCONFIGS }}
-      run: dotnet run -p ./src/Ray.BiliBiliTool.Console -userId=${userId} -sessData=${sessData} -biliJct=${biliJct} -closeConsoleWhenEnd=1 ${otherConfigs}
+      run: dotnet run --project ./src/Ray.BiliBiliTool.Console -userId=${userId} -sessData=${sessData} -biliJct=${biliJct} -closeConsoleWhenEnd=1 ${otherConfigs}
