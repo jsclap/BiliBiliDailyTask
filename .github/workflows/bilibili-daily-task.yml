@@ -37,10 +37,21 @@ jobs:
     - name: Download dotnet-install.sh
       run: |
         curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
+        echo "Downloaded dotnet-install.sh to $(pwd)/dotnet-install.sh"
 
     - name: Make dotnet-install.sh executable
       run: |
         chmod +x dotnet-install.sh
+        echo "Made dotnet-install.sh executable"
+
+    - name: Verify dotnet-install.sh exists
+      run: |
+        if [ -f "./dotnet-install.sh" ]; then
+          echo "dotnet-install.sh exists"
+        else
+          echo "dotnet-install.sh does not exist"
+          exit 1
+        fi
 
     - name: Install .NET Core 3.1 Runtime
       run: |
