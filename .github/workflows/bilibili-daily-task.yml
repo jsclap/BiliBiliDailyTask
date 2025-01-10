@@ -38,6 +38,17 @@ jobs:
       run: |
         curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
         echo "Downloaded dotnet-install.sh to $(pwd)/dotnet-install.sh"
+        
+    - name: Make dotnet-install.sh executable
+      run: |
+        chmod +x ./dotnet-install.sh  # 使用相对路径
+        ls -l ./dotnet-install.sh  # 再次列出文件，确认权限已更改
+        if [ -x "./dotnet-install.sh" ]; then
+          echo "dotnet-install.sh is executable"
+        else
+          echo "Failed to make dotnet-install.sh executable"
+          exit 1
+        fi
 
     - name: Install .NET Core 3.1 Runtime
       run: |
