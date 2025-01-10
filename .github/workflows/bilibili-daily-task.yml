@@ -25,7 +25,6 @@ jobs:
 
     - name: Install dependencies
       run: dotnet restore
-           export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
       
     - name: Build
       run: dotnet build --configuration Release --no-restore
