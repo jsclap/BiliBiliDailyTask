@@ -12,31 +12,33 @@ on:
 
 jobs:
   run-bilibili-tool:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
       
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.301
-     
-    - name: test
-      run: export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+    - name: Update package lists
+      run: |
+        sudo apt-get update
+        sudo apt-get update --fix-missing
+
+    - name: Install OpenSSL
+      run: |
+        sudo apt-get install -y libssl-dev
+
+    - name: Set InvariantGlobalization
+      run: echo "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" >> $GITHUB_ENV
       
     - name: Install dependencies
       run: dotnet restore
            
-      
     - name: Build
       run: dotnet build --configuration Release --no-restore
       
     - name: Run
       env:
-        userId: ${{secrets.USERID}}
-        sessData: ${{secrets.SESSDATA}}
-        biliJct: ${{secrets.BILIJCT}}
-        otherConfigs: ${{secrets.OTHERCONFIGS}}
+        userId: ${{ secrets.USERID }}
+        sessData: ${{ secrets.SESSDATA }}
+        biliJct: ${{ secrets.BILIJCT }}
+        otherConfigs: ${{ secrets.OTHERCONFIGS }}
       run: dotnet run -p ./src/Ray.BiliBiliTool.Console -userId=${userId} -sessData=${sessData} -biliJct=${biliJct} -closeConsoleWhenEnd=1 ${otherConfigs}
