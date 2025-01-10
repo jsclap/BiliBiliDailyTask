@@ -34,6 +34,14 @@ jobs:
       with:
         dotnet-version: 6.0.x  # 使用 .NET 6
 
+    - name: Download dotnet-install.sh
+      run: |
+        curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
+
+    - name: Make dotnet-install.sh executable
+      run: |
+        chmod +x dotnet-install.sh
+
     - name: Install .NET Core 3.1 Runtime
       run: |
         ./dotnet-install.sh --architecture x64 --install-dir /usr/share/dotnet/ --runtime aspnet --version 3.1.0
