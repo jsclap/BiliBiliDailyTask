@@ -16,8 +16,5 @@
     <ProjectReference Include="..\Ray.BiliBiliTool.Infrastructure\Ray.BiliBiliTool.Infrastructure.csproj" />
   </ItemGroup>
 
-  <PropertyGroup>
-  <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
 
 </Project>
